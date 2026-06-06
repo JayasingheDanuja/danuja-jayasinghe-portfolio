@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life on Land Case Study — Danuja Jayasinghe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#08080f;--bg2:#0c0c0a;--surface:#141410;--surface2:#1a1a14;
+    --border:rgba(180,160,80,0.14);--violet:#7c3aed;--violet-light:#a78bfa;
+    --gold:#d4a847;--gold-light:#f0c060;--gold-glow:rgba(212,168,71,0.2);
+    --sage:#8aaa6a;--text:#fffef0;--text-muted:#9a9a7a;--text-dim:#4a4a3a;
+    --font:'Plus Jakarta Sans',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none;}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .cursor{width:10px;height:10px;background:var(--gold-light);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+  .cursor-ring{width:32px;height:32px;border:1px solid rgba(240,192,96,0.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .12s ease;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:20px 64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-size:1.1rem;font-weight:800;color:var(--text);text-decoration:none;}
+  .nav-logo span{color:var(--violet-light);}
+  .nav-back{display:inline-flex;align-items:center;gap:8px;color:var(--text-muted);text-decoration:none;font-size:0.82rem;font-weight:500;transition:color 0.2s;cursor:none;}
+  .nav-back:hover{color:var(--text);}
+  .nav-back svg{width:16px;height:16px;}
+  .progress-bar{position:fixed;top:0;left:0;height:2px;z-index:600;background:linear-gradient(90deg,var(--gold),var(--sage));transition:width 0.1s;width:0%;}
+  .case-hero{min-height:90vh;display:flex;align-items:flex-end;padding:120px 64px 80px;position:relative;overflow:hidden;}
+  .case-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(212,168,71,0.1) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(138,170,106,0.07) 0%,transparent 60%);}
+  .case-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(212,168,71,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,71,0.04) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 80% 80% at 60% 40%,black,transparent);}
+  .case-hero-content{position:relative;z-index:2;max-width:860px;width:55%;}
+  .case-tag{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid rgba(212,168,71,0.3);border-radius:100px;font-size:0.7rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,168,71,0.07);margin-bottom:28px;opacity:0;animation:fadeUp 0.7s 0.1s forwards;}
+  .case-tag-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .case-title{font-size:clamp(2.8rem,6vw,5.5rem);font-weight:800;line-height:1.151.05;letter-spacing:-0.03em;margin-bottom:28px;opacity:0;animation:fadeUp 0.7s 0.25s forwards;}
+  .case-title .t1{display:block;background:linear-gradient(120deg,var(--gold-light) 0%,var(--sage) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+  .case-subtitle{font-size:1.15rem;font-weight:300;color:var(--text-muted);max-width:560px;line-height:1.75;margin-bottom:48px;opacity:0;animation:fadeUp 0.7s 0.4s forwards;}
+  .case-meta-row{display:flex;gap:40px;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 0.55s forwards;}
+  .case-meta-label{font-size:0.68rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;}
+  .case-meta-value{font-size:0.88rem;font-weight:500;color:var(--text-muted);}
+  .case-hero-img{position:absolute;right:0;top:0;bottom:0;width:45%;display:flex;align-items:center;justify-content:center;padding:120px 40px 80px 0;opacity:0;animation:fadeIn 1s 0.6s forwards;}
+  .case-hero-img img{max-height:70vh;max-width:100%;object-fit:cover;border-radius:16px;border:1px solid var(--border);filter:drop-shadow(0 40px 80px rgba(212,168,71,0.15));}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  .container{max-width:900px;margin:0 auto;padding:0 64px;}
+  .container-wide{max-width:1160px;margin:0 auto;padding:0 64px;}
+  section.case-section{padding:100px 0;}
+  section.case-section:nth-child(odd){background:var(--bg2);}
+  section.case-section:nth-child(even){background:var(--bg);}
+  .section-eyebrow{font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-light);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+  .section-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold-light);}
+  .section-heading{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;letter-spacing:-0.025em;line-height:1.15;margin-bottom:24px;}
+  .section-divider{width:36px;height:2px;background:linear-gradient(90deg,var(--gold),var(--sage));border-radius:2px;margin-bottom:28px;}
+  p.body-text{font-size:0.97rem;color:var(--text-muted);line-height:1.8;font-weight:300;margin-bottom:20px;}
+  p.body-text strong{color:var(--text);font-weight:600;}
+  p.body-text:last-child{margin-bottom:0;}
+  .overview-grid{display:flex;flex-direction:column;gap:0;}
+  .overview-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;transition:border-color 0.2s,transform 0.2s;}
+  .stat-card:hover{border-color:rgba(212,168,71,0.4);transform:translateY(-2px);}
+  .stat-number{font-size:2rem;font-weight:800;line-height:1;background:linear-gradient(120deg,var(--gold-light),var(--sage));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+  .stat-label{font-size:0.73rem;color:var(--text-dim);font-weight:400;}
+  .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px;}
+  .process-step{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 20px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+  .process-step:hover{border-color:rgba(212,168,71,0.35);transform:translateY(-3px);}
+  .process-step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--sage));opacity:0;transition:opacity 0.2s;}
+  .process-step:hover::before{opacity:1;}
+  .step-num{font-size:2.5rem;font-weight:800;color:var(--text-dim);line-height:1;margin-bottom:12px;}
+  .step-title{font-size:0.88rem;font-weight:700;margin-bottom:8px;}
+  .step-desc{font-size:0.78rem;color:var(--text-muted);line-height:1.6;font-weight:300;}
+  .img-full{width:100%;border-radius:16px;display:block;border:1px solid var(--border);margin:40px 0;}
+  .img-caption{font-size:0.75rem;color:var(--text-dim);text-align:center;margin-top:-28px;margin-bottom:40px;}
+  .img-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:40px 0;}
+  .img-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:40px 0;}
+  .img-grid-2 img,.img-grid-3 img{width:100%;border-radius:12px;display:block;border:1px solid var(--border);object-fit:cover;transition:transform 0.3s,box-shadow 0.3s;}
+  .img-grid-2 img:hover,.img-grid-3 img:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(212,168,71,0.1);}
+  .img-wrap{position:relative;}
+  .img-wrap-label{position:absolute;bottom:12px;left:12px;background:rgba(8,8,15,0.85);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.68rem;font-weight:600;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;}
+  .highlight-box{background:rgba(212,168,71,0.06);border:1px solid rgba(212,168,71,0.2);border-left:3px solid var(--gold);border-radius:12px;padding:24px 28px;margin:32px 0;}
+  .highlight-box p{color:var(--text-muted);font-size:0.92rem;line-height:1.75;font-weight:300;}
+  .highlight-box p strong{color:var(--text);font-weight:600;}
+  .team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:32px;}
+  .team-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px;transition:border-color 0.2s;}
+  .team-card:hover{border-color:rgba(212,168,71,0.3);}
+  .team-name{font-size:0.9rem;font-weight:600;margin-bottom:6px;}
+  .team-role{font-size:0.78rem;color:var(--text-dim);font-weight:300;}
+  .team-card.mine{border-color:rgba(212,168,71,0.25);background:rgba(212,168,71,0.04);}
+  .team-card.mine .team-name{color:var(--gold-light);}
+  .milestones{display:flex;flex-direction:column;gap:0;margin-top:32px;position:relative;}
+  .milestones::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:var(--border);}
+  .milestone-item{display:flex;gap:20px;align-items:flex-start;padding:20px 0;position:relative;}
+  .milestone-dot{width:10px;height:10px;background:var(--gold);border-radius:50%;flex-shrink:0;margin-top:5px;position:relative;z-index:1;margin-left:16px;}
+  .milestone-content{padding-left:12px;}
+  .milestone-title{font-size:0.88rem;font-weight:600;margin-bottom:4px;}
+  .milestone-desc{font-size:0.82rem;color:var(--text-muted);font-weight:300;line-height:1.5;}
+  .learnings-list{display:flex;flex-direction:column;gap:16px;margin-top:32px;}
+  .learning-item{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s;}
+  .learning-item:hover{border-color:rgba(212,168,71,0.3);}
+  .learning-num{font-size:0.7rem;font-weight:700;color:var(--gold-light);background:rgba(212,168,71,0.1);border:1px solid rgba(212,168,71,0.2);border-radius:6px;padding:3px 8px;flex-shrink:0;margin-top:2px;}
+  .learning-text{font-size:0.9rem;color:var(--text-muted);line-height:1.65;font-weight:300;}
+  .learning-text strong{color:var(--text);font-weight:500;}
+  .wip-banner{background:rgba(212,168,71,0.06);border:1px solid rgba(212,168,71,0.2);border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:14px;margin-bottom:32px;}
+  .wip-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0;}
+  .wip-text{font-size:0.85rem;color:var(--text-muted);font-weight:400;}
+  .case-cta{padding:100px 0;background:var(--bg2);text-align:center;}
+  .case-cta h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-0.025em;margin-bottom:16px;}
+  .case-cta p{color:var(--text-muted);font-weight:300;margin-bottom:40px;max-width:400px;margin-left:auto;margin-right:auto;}
+  .cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn-gold{padding:13px 30px;background:var(--gold);color:#0a0a0a;border:none;border-radius:100px;font-family:var(--font);font-size:0.88rem;font-weight:700;text-decoration:none;cursor:none;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;box-shadow:0 0 28px rgba(212,168,71,0.3);}
+  .btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);}
+  .btn-ghost{padding:13px 30px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:100px;font-family:var(--font);font-size:0.88rem;font-weight:400;text-decoration:none;cursor:none;transition:border-color 0.2s,background 0.2s;}
+  .btn-ghost:hover{border-color:var(--violet-light);background:rgba(124,58,237,0.07);}
+  .next-project{padding:60px 0;background:var(--bg);border-top:1px solid var(--border);}
+  .next-inner{display:flex;justify-content:space-between;align-items:center;}
+  .next-label{font-size:0.68rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;}
+  .next-title{font-size:1.3rem;font-weight:700;}
+  .next-link{display:inline-flex;align-items:center;gap:8px;color:var(--text-muted);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color 0.2s;cursor:none;}
+  .next-link:hover{color:var(--text);}
+  .next-link svg{width:18px;height:18px;}
+  .reveal{opacity:0;transform:translateY(32px);transition:opacity 0.65s ease,transform 0.65s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  footer{padding:28px 64px;background:var(--bg);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  footer p{font-size:0.75rem;color:var(--text-dim);}
+  .footer-links{display:flex;gap:22px;}
+  .footer-links a{font-size:0.75rem;color:var(--text-dim);text-decoration:none;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--violet-light);}
+  @media(max-width:900px){
+    nav{padding:18px 24px;}.case-hero{padding:100px 24px 60px;}.case-hero-img{display:none;}
+    .container,.container-wide{padding:0 24px;}.overview-grid,.team-grid{grid-template-columns:1fr;}
+    .process-steps{grid-template-columns:1fr 1fr;}.img-grid-2,.img-grid-3{grid-template-columns:1fr;}
+    .next-inner{flex-direction:column;gap:20px;text-align:center;}
+    footer{flex-direction:column;gap:14px;padding:24px;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<nav>
+  <a href="index.html" class="nav-logo">D<span>.</span>J</a>
+  <a href="index.html#projects" class="nav-back"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>Back to Work</a>
+</nav>
+<div class="case-hero">
+  <div class="case-hero-bg"></div>
+  <div class="case-hero-grid"></div>
+  <div class="case-hero-content">
+    <div class="case-tag"><span class="case-tag-dot"></span>Web Design &amp; Development &middot; Group Project</div>
+    <h1 class="case-title"><span class="t1">Life on Land</span></h1>
+    <p class="case-subtitle">A responsive, nature-themed website built for the Web Design and Development module, exploring environmental awareness through structured web design and collaborative team development.</p>
+    <div class="case-meta-row">
+      <div class="case-meta-item"><div class="case-meta-label">Role</div><div class="case-meta-value">UI Design &amp; Frontend (Feedback, Team pages)</div></div>
+      <div class="case-meta-item"><div class="case-meta-label">Tools</div><div class="case-meta-value">HTML, CSS, JavaScript</div></div>
+      <div class="case-meta-item"><div class="case-meta-label">Type</div><div class="case-meta-value">Web Design &middot; Group Project</div></div>
+      <div class="case-meta-item"><div class="case-meta-label">Module</div><div class="case-meta-value">Web Design &amp; Development (4COSC011W)</div></div>
+    </div>
+  </div>
+  <div class="case-hero-img"><img src="images/life_on_the_land_cs_2.png" alt="Life on Land website screenshot"></div>
+</div>
+
+<section class="case-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="wip-banner"><span class="wip-dot"></span><span class="wip-text">Live deployment is in progress. The codebase is complete.</span></div>
+      <div class="section-eyebrow">Overview</div>
+      <h2 class="section-heading">Where design meets the natural world</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="overview-grid reveal">
+      <div class="overview-stats">
+        <div class="stat-card"><div class="stat-number">4</div><div class="stat-label">Team members, Group G21</div></div>
+        <div class="stat-card"><div class="stat-number">6+</div><div class="stat-label">Pages designed and built</div></div>
+        <div class="stat-card"><div class="stat-number">HTML</div><div class="stat-label">CSS and JavaScript stack</div></div>
+        <div class="stat-card"><div class="stat-number">SDG 15</div><div class="stat-label">Life on Land theme</div></div>
+      </div>
+      <p class="body-text">Life on Land is a responsive website built by a four-person team for the Web Design and Development module (4COSC011W). The project covered the end-to-end design and development lifecycle: from concept and visual identity all the way through to a fully functioning multi-page web application.</p>
+      <p class="body-text">My specific contributions were the <strong>Feedback system</strong> and <strong>Team page</strong>, along with supporting the overall visual identity and navigation design. The site uses a dark, nature-themed aesthetic with rich imagery, structured typography, and a validated interactive feedback form.</p>
+      <div class="highlight-box">
+        <p><strong>SDG Connection:</strong> The project theme tied into UN Sustainable Development Goal 15 (Life on Land), using web design as a tool to raise awareness of biodiversity, conservation, and the natural environment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">The Team</div>
+      <h2 class="section-heading">Collaboration and ownership</h2>
+      <div class="section-divider"></div>
+      <p class="body-text">The project was structured as a collaborative Agile-like workflow with weekly reviews, online and in-person sessions, and clearly defined ownership per component. Each team member owned specific pages and features from design to delivery.</p>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card mine">
+        <div class="team-name">Danuja Jayasinghe (Me)</div>
+        <div class="team-role">Feedback system and Team page design and development</div>
+      </div>
+      <div class="team-card">
+        <div class="team-name">Abdul Nazar</div>
+        <div class="team-role">Home page, template design, navigation, and data tables</div>
+      </div>
+      <div class="team-card">
+        <div class="team-name">Damya Gamage</div>
+        <div class="team-role">Splash screen and Volunteer components</div>
+      </div>
+      <div class="team-card">
+        <div class="team-name">Ahintha Jayamanna</div>
+        <div class="team-role">User profiles and sitemap</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="container-wide">
+    <div class="container" style="padding:0;">
+      <div class="reveal">
+        <div class="section-eyebrow">Design Process</div>
+        <h2 class="section-heading">From concept to delivery</h2>
+        <div class="section-divider"></div>
+      </div>
+    </div>
+    <div class="process-steps reveal">
+      <div class="process-step"><div class="step-num">01</div><div class="step-title">Concept</div><div class="step-desc">Topic selection and ideation. Defined the nature and wilderness theme aligned with SDG 15. Researched visual references for a dark, immersive web aesthetic.</div></div>
+      <div class="process-step"><div class="step-num">02</div><div class="step-title">Visual Identity</div><div class="step-desc">Confirmed the dark forest color scheme: deep greens, earthy tones, and warm amber accents. Set typography standards and image treatment guidelines for consistency.</div></div>
+      <div class="process-step"><div class="step-num">03</div><div class="step-title">Structure</div><div class="step-desc">Built the sitemap and defined the page template. Confirmed navigation, header structure, and footer components to ensure a consistent global experience.</div></div>
+      <div class="process-step"><div class="step-num">04</div><div class="step-title">Build and QA</div><div class="step-desc">Weekly development sprints per team member. Final quality assurance pass to confirm all modules met the agreed design and module requirements.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">My Contribution</div>
+      <h2 class="section-heading">The pages I built</h2>
+      <div class="section-divider"></div>
+      <p class="body-text">Within the team structure I focused on two key sections: the Feedback system and the Team page. Both required careful attention to interaction design, form validation, and visual consistency with the established site template.</p>
+    </div>
+    <div class="milestones reveal">
+      <div class="milestone-item">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-title">Feedback System</div>
+          <div class="milestone-desc">Designed and developed a validated feedback form with client-side JavaScript validation. The form includes field validation for name, email, and message fields, with real-time error feedback and success confirmation, following structured web design practices.</div>
+        </div>
+      </div>
+      <div class="milestone-item">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-title">Team Page</div>
+          <div class="milestone-desc">Built a team showcase page presenting all four contributors with consistent card layout, hover states, and integration with the site-wide navigation template.</div>
+        </div>
+      </div>
+      <div class="milestone-item">
+        <div class="milestone-dot"></div>
+        <div class="milestone-content">
+          <div class="milestone-title">Visual Identity Support</div>
+          <div class="milestone-desc">Contributed to defining the color scheme and typography choices in the early visual identity phase, helping establish the dark wilderness aesthetic used across all pages.</div>
+        </div>
+      </div>
+    </div>
+    <div class="img-grid-2 reveal" style="margin-top:40px;">
+      <div class="img-wrap">
+        <img src="images/lol_feedback.png" alt="Life on Land feedback page" style="aspect-ratio:16/10;">
+        <div class="img-wrap-label">Feedback Page</div>
+      </div>
+      <div class="img-wrap">
+        <img src="images/lol_team.png" alt="Life on Land team page" style="aspect-ratio:16/10;">
+        <div class="img-wrap-label">Team Page</div>
+      </div>
+    </div>
+    <p class="img-caption">The two primary pages I designed and developed</p>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Final Site</div>
+      <h2 class="section-heading">The complete experience</h2>
+      <div class="section-divider"></div>
+      <p class="body-text">The final site brings together all six sections into a cohesive, responsive web experience. The dark forest aesthetic carries consistently from the splash screen through to the data tables and feedback form.</p>
+    </div>
+    <img src="images/life_on_the_land_cs2.png" alt="Life on Land full site screenshot" class="img-full reveal">
+    <p class="img-caption">Homepage of the completed Life on Land website</p>
+    <div class="img-grid-3 reveal">
+      <div class="img-wrap"><img src="images/lol_screen2.png" alt="Life on Land inner page" style="aspect-ratio:16/10;"><div class="img-wrap-label">Content Page</div></div>
+      <div class="img-wrap"><img src="images/lol_screen3.png" alt="Life on Land navigation" style="aspect-ratio:16/10;"><div class="img-wrap-label">Navigation</div></div>
+      <div class="img-wrap"><img src="images/lol_screen4.png" alt="Life on Land statistics table" style="aspect-ratio:16/10;"><div class="img-wrap-label">Data Table</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="case-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Reflections</div>
+      <h2 class="section-heading">What I took from this project</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="learnings-list reveal">
+      <div class="learning-item"><span class="learning-num">01</span><div class="learning-text"><strong>Consistency is a team sport.</strong> When four people are building the same site, the only way to maintain a cohesive visual identity is through clearly documented standards. Templates, color variables, and shared typography rules are not optional, they are the product.</div></div>
+      <div class="learning-item"><span class="learning-num">02</span><div class="learning-text"><strong>Form design has more depth than it appears.</strong> A validated feedback form sounds simple, but getting the error states, success confirmation, and field interaction logic right took real iteration. Good form UX is invisible when done well.</div></div>
+      <div class="learning-item"><span class="learning-num">03</span><div class="learning-text"><strong>Working within constraints builds discipline.</strong> Pure HTML, CSS, and JavaScript without any frameworks forced me to understand the fundamentals deeply. Those fundamentals now make me a better designer because I know what is possible and what is costly to build.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="case-cta">
+  <div class="container">
+    <h2 class="reveal">See the full project</h2>
+    <p class="reveal">Live deployment is in progress. View the source code on GitHub.</p>
+    <div class="cta-buttons reveal">
+      <a href="https://github.com/JayasingheDanuja" target="_blank" class="btn-gold">GitHub</a>
+      <a href="index.html#projects" class="btn-ghost">Back to All Work</a>
+    </div>
+  </div>
+</div>
+
+<div class="next-project">
+  <div class="container-wide">
+    <div class="next-inner">
+      <div><div class="next-label">Back to start</div><div class="next-title">Drop4Life</div></div>
+      <a href="drop4life.html" class="next-link">View Case Study<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Danuja Jayasinghe</p>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/danuja-jayasinghe-75412628a/" target="_blank">LinkedIn</a>
+    <a href="https://github.com/JayasingheDanuja" target="_blank">GitHub</a>
+    <a href="mailto:jayasinghedanuja404@gmail.com">Email</a>
+  </div>
+</footer>
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  (function animRing(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+  document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.style.width='18px';cursor.style.height='18px';ring.style.transform='translate(-50%,-50%) scale(1.5)';});el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.transform='translate(-50%,-50%) scale(1)';});});
+  const bar=document.getElementById('progressBar');
+  window.addEventListener('scroll',()=>{bar.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';});
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

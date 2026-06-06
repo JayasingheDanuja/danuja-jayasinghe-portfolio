@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drop4Life Case Study — Danuja Jayasinghe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08080f;
+      --bg2: #0c0c16;
+      --surface: #111120;
+      --surface2: #16162a;
+      --border: rgba(124, 58, 237, 0.14);
+      --violet: #7c3aed;
+      --violet-light: #a78bfa;
+      --pink: #e879a0;
+      --red: #e53e3e;
+      --red-light: #fc8181;
+      --red-glow: rgba(229, 62, 62, 0.2);
+      --text: #eeeeff;
+      --text-muted: #8888aa;
+      --text-dim: #44445a;
+      --font: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* CURSOR */
+    .cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--red-light);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .15s, height .15s;
+    }
+
+    .cursor-ring {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(252, 129, 129, 0.35);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      padding: 20px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 8, 15, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--violet-light);
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      cursor: none;
+    }
+
+    .nav-back:hover {
+      color: var(--text);
+    }
+
+    .nav-back svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* HERO */
+    .case-hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 120px 64px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(229, 62, 62, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(124, 58, 237, 0.08) 0%, transparent 60%);
+    }
+
+    .case-hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(229, 62, 62, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(229, 62, 62, 0.04) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(ellipse 80% 80% at 60% 40%, black, transparent);
+    }
+
+    .case-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+    }
+
+    .case-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border: 1px solid rgba(229, 62, 62, 0.3);
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red-light);
+      background: rgba(229, 62, 62, 0.07);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s forwards;
+    }
+
+    .case-tag-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .case-title {
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.25s forwards;
+    }
+
+    .case-title .t1 {
+      display: block;
+      background: linear-gradient(120deg, var(--red-light) 0%, #ff6b9d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .case-subtitle {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+
+    .case-meta-row {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.55s forwards;
+    }
+
+    .case-meta-item {}
+
+    .case-meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .case-meta-value {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .case-meta-value a {
+      color: var(--red-light);
+      text-decoration: none;
+    }
+
+    .case-meta-value a:hover {
+      color: var(--text);
+    }
+
+    /* HERO IMAGE */
+    .case-hero-img {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 42%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 64px 80px 0;
+      opacity: 0;
+      animation: fadeIn 1s 0.6s forwards;
+    }
+
+    .case-hero-img img {
+      max-height: 75vh;
+      max-width: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 40px 80px rgba(229, 62, 62, 0.25));
+      animation: heroFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes heroFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-16px);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* SCROLL PROGRESS */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      z-index: 600;
+      background: linear-gradient(90deg, var(--red), #ff6b9d);
+      transition: width 0.1s;
+      width: 0%;
+    }
+
+    /* CONTENT */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 64px;
+    }
+
+    .container-wide {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 64px;
+    }
+
+    section.case-section {
+      padding: 100px 0;
+    }
+
+    section.case-section:nth-child(odd) {
+      background: var(--bg2);
+    }
+
+    section.case-section:nth-child(even) {
+      background: var(--bg);
+    }
+
+    .section-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red-light);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--red-light);
+    }
+
+    .section-heading {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .section-divider {
+      width: 36px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), #ff6b9d);
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+
+    p.body-text {
+      font-size: 0.97rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+
+    p.body-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    p.body-text:last-child {
+      margin-bottom: 0;
+    }
+
+    /* OVERVIEW STATS */
+    .overview-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .overview-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(229, 62, 62, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(120deg, var(--red-light), #ff9a9a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.73rem;
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    /* PROCESS STEPS */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .process-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .process-step:hover {
+      border-color: rgba(229, 62, 62, 0.35);
+      transform: translateY(-3px);
+    }
+
+    .process-step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), #ff6b9d);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .process-step:hover::before {
+      opacity: 1;
+    }
+
+    .step-num {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* IMAGE DISPLAY */
+    .img-full {
+      width: 100%;
+      border-radius: 16px;
+      display: block;
+      border: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    .img-caption {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: -28px;
+      margin-bottom: 40px;
+    }
+
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0;
+    }
+
+    .img-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0;
+    }
+
+    .img-grid-2 img,
+    .img-grid-3 img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      border: 1px solid var(--border);
+      aspect-ratio: 9/16;
+      object-fit: cover;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .img-grid-2 img:hover,
+    .img-grid-3 img:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(229, 62, 62, 0.15);
+    }
+
+    .img-wrap {
+      position: relative;
+    }
+
+    .img-wrap-label {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(8, 8, 15, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* BEFORE AFTER */
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+      align-items: start;
+    }
+
+    .ba-col-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      display: inline-block;
+    }
+
+    .ba-col-label.lo {
+      background: rgba(68, 68, 90, 0.3);
+      border: 1px solid var(--text-dim);
+      color: var(--text-dim);
+    }
+
+    .ba-col-label.hi {
+      background: rgba(229, 62, 62, 0.1);
+      border: 1px solid rgba(229, 62, 62, 0.3);
+      color: var(--red-light);
+    }
+
+    .ba-col img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    /* COLOR PALETTE */
+    .color-palette {
+      display: flex;
+      gap: 12px;
+      margin: 32px 0;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swatch-block {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .swatch-label {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    /* HIGHLIGHT BOX */
+    .highlight-box {
+      background: rgba(229, 62, 62, 0.06);
+      border: 1px solid rgba(229, 62, 62, 0.2);
+      border-left: 3px solid var(--red);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 32px 0;
+    }
+
+    .highlight-box p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .highlight-box p strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* RESULTS */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .result-card:hover {
+      border-color: rgba(229, 62, 62, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .result-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(120deg, var(--red-light), #ff9a9a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .result-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    /* LEARNINGS */
+    .learnings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .learning-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      transition: border-color 0.2s;
+    }
+
+    .learning-item:hover {
+      border-color: rgba(229, 62, 62, 0.3);
+    }
+
+    .learning-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--red-light);
+      background: rgba(229, 62, 62, 0.1);
+      border: 1px solid rgba(229, 62, 62, 0.2);
+      border-radius: 6px;
+      padding: 3px 8px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .learning-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .learning-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* CTA */
+    .case-cta {
+      padding: 100px 0;
+      background: var(--bg2);
+      text-align: center;
+    }
+
+    .case-cta h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+
+    .case-cta p {
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-bottom: 40px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-red {
+      padding: 13px 30px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 28px rgba(229, 62, 62, 0.3);
+    }
+
+    .btn-red:hover {
+      background: #fc4d4d;
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(229, 62, 62, 0.5);
+    }
+
+    .btn-ghost {
+      padding: 13px 30px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 400;
+      text-decoration: none;
+      cursor: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--violet-light);
+      background: rgba(124, 58, 237, 0.07);
+    }
+
+    /* NEXT PROJECT */
+    .next-project {
+      padding: 60px 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    .next-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .next-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .next-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .next-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      cursor: none;
+    }
+
+    .next-link:hover {
+      color: var(--text);
+    }
+
+    .next-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 28px 64px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 22px;
+    }
+
+    .footer-links a {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--violet-light);
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 18px 24px;
+      }
+
+      .case-hero {
+        padding: 100px 24px 60px;
+      }
+
+      .case-hero-img {
+        display: none;
+      }
+
+      .case-hero-content {
+        max-width: 100%;
+      }
+
+      .container,
+      .container-wide {
+        padding: 0 24px;
+      }
+
+      .process-steps {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .overview-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .img-grid-2,
+      .img-grid-3,
+      .before-after {
+        grid-template-columns: 1fr;
+      }
+
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .next-inner {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 14px;
+        padding: 24px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">D<span>.</span>J</a>
+    <a href="index.html#projects" class="nav-back">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Work
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="case-hero">
+    <div class="case-hero-bg"></div>
+    <div class="case-hero-grid"></div>
+    <div class="case-hero-content">
+      <div class="case-tag"><span class="case-tag-dot"></span>UI/UX Case Study &middot; Solo Project</div>
+      <h1 class="case-title">
+        <span class="t1">Drop4Life</span>
+      </h1>
+      <p class="case-subtitle">A blood donation mobile app designed to increase donor motivation through a gamified
+        rewards system, appointment booking, and real-time blood need alerts.</p>
+      <div class="case-meta-row">
+        <div class="case-meta-item">
+          <div class="case-meta-label">Role</div>
+          <div class="case-meta-value">Solo UI/UX Designer</div>
+        </div>
+        <div class="case-meta-item">
+          <div class="case-meta-label">Tools</div>
+          <div class="case-meta-value">Figma, Google Forms</div>
+        </div>
+        <div class="case-meta-item">
+          <div class="case-meta-label">Type</div>
+          <div class="case-meta-value">Mobile App &middot; HCI Module</div>
+        </div>
+        <div class="case-meta-item">
+          <div class="case-meta-label">Prototype</div>
+          <div class="case-meta-value"><a
+              href="https://www.figma.com/proto/D9OhhkHzhZNCr1peqfYlHG/Danuja_HCI_CW2?node-id=1-2176&page-id=0%3A1&t=A7aAMTalZ5qnVDMJ-1"
+              target="_blank">View in Figma</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="case-hero-img">
+      <img src="images/d4l_hero.png" alt="Drop4Life app mockup">
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">Overview</div>
+        <h2 class="section-heading">Making blood donation feel rewarding</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="overview-grid reveal">
+        <div class="overview-stats">
+          <div class="stat-card">
+            <div class="stat-number">70.4%</div>
+            <div class="stat-label">Rated visual design as Excellent</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">4/5</div>
+            <div class="stat-label">Average ease of navigation score</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Innovative modules fully designed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">SDG 3</div>
+            <div class="stat-label">Good Health and Well-being</div>
+          </div>
+        </div>
+        <p class="body-text">Drop4Life is a mobile application designed to address a critical public health challenge:
+          <strong>keeping blood donors engaged and motivated</strong> to donate regularly. Aligned with the UN
+          Sustainable Development Goal 3 (Good Health and Well-being), the project aimed to move beyond simple utility
+          and build a product that people genuinely want to use.
+        </p>
+        <p class="body-text">The project began as a group CW1 (low-fidelity wireframes) and evolved into a fully
+          individual CW2 high-fidelity prototype. I owned the <strong>Rewards module</strong> and the <strong>Needs
+            module</strong> entirely, which became the most innovative features in the app.</p>
+        <div class="highlight-box">
+          <p><strong>The core idea:</strong> If users are rewarded for donating, they will keep the app open, keep
+            donating, and enjoy the process. Points, badges, health check-up vouchers, and cafe discounts turn a
+            selfless act into a satisfying habit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">The Problem</div>
+        <h2 class="section-heading">Donors donate once and disappear</h2>
+        <div class="section-divider"></div>
+        <p class="body-text">Blood banks consistently face a shortage of regular donors. Most people donate once when
+          prompted by an emergency appeal, but there is no mechanism to bring them back. Existing apps are purely
+          transactional: find a center, book a slot, done. There is nothing that makes a person feel acknowledged,
+          rewarded, or connected to the impact they are making.</p>
+        <p class="body-text">The challenge I set out to solve was: <strong>how do you turn a one-time action into a
+            habit?</strong> The answer, backed by behavioral design research, is gamification combined with visible
+          impact.</p>
+        <div class="reveal" style="max-width:800px; margin:40px auto 0; text-align:center;">
+          <div class="img-wrap" style="display:inline-block; width:100%;">
+            <img src="images/d4l_lofi1.png" alt="Drop4Life low fidelity wireframe"
+              style="width:100%; border-radius:12px; border:1px solid var(--border); display:block; height:auto;">
+            <div class="img-wrap-label">Low Fidelity</div>
+          </div>
+        </div>
+        <p class="img-caption" style="margin-top:16px;">Early low-fidelity wireframe from CW1, exploring the core layout
+          structure (928 x 668)</p>
+      </div>
+  </section>
+
+  <!-- DESIGN PROCESS -->
+  <section class="case-section">
+    <div class="container-wide">
+      <div class="container" style="padding:0;">
+        <div class="reveal">
+          <div class="section-eyebrow">Design Process</div>
+          <h2 class="section-heading">From sketch to system</h2>
+          <div class="section-divider"></div>
+        </div>
+      </div>
+      <div class="process-steps reveal">
+        <div class="process-step">
+          <div class="step-num">01</div>
+          <div class="step-title">Research</div>
+          <div class="step-desc">Surveys and analysis to identify what stops donors from returning. Key finding: lack of
+            motivation and no visible impact feedback.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">02</div>
+          <div class="step-title">Low Fidelity</div>
+          <div class="step-desc">Wireframed all core modules: Blood Donation, Needs, Rewards, Profile, Settings,
+            Support. Validated navigation flow and IA.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">03</div>
+          <div class="step-title">Visual Identity</div>
+          <div class="step-desc">Chose red (#D32F2F, #EF5350) for health and urgency. Inter font for clinical clarity.
+            Built a consistent component library in Figma.</div>
+        </div>
+        <div class="process-step">
+          <div class="step-num">04</div>
+          <div class="step-title">High Fidelity + Testing</div>
+          <div class="step-desc">Iterated through two rounds of usability testing with real users and expert critique
+            from an industry UX designer.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISUAL DESIGN -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">Visual Design</div>
+        <h2 class="section-heading">Color, type, and intentional hierarchy</h2>
+        <div class="section-divider"></div>
+        <p class="body-text">The visual language needed to feel <strong>urgent but approachable</strong>. Red
+          communicates health, blood, and action without being alarming. White backgrounds keep the interface clinical
+          and trustworthy. The Inter font family was chosen for its legibility across all sizes, important for users who
+          may be in emergency situations or have visual impairments.</p>
+      </div>
+      <div class="color-palette reveal">
+        <div class="color-swatch">
+          <div class="swatch-block" style="background:#D32F2F;"></div>
+          <div class="swatch-label">#D32F2F</div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block" style="background:#EF5350;"></div>
+          <div class="swatch-label">#EF5350</div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block" style="background:#FFEBEE;"></div>
+          <div class="swatch-label">#FFEBEE</div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block" style="background:#FFFFFF; border: 1px solid #eee;"></div>
+          <div class="swatch-label">#FFFFFF</div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block" style="background:#1A1A1A;"></div>
+          <div class="swatch-label">#1A1A1A</div>
+        </div>
+      </div>
+
+      <!-- Before After -->
+      <div class="reveal">
+        <p class="body-text" style="margin-top:0; margin-bottom: 24px;">Moving from low-fidelity to high-fidelity, the
+          visual language came to life. The same navigation structure and information architecture from the wireframes
+          was preserved, while color, typography, and component polish were applied on top.</p>
+      </div>
+      <div class="before-after reveal">
+        <div class="ba-col">
+          <div class="ba-col-label lo">Low Fidelity</div>
+          <img src="images/d4l_lofi_rewards.png" alt="Rewards module low fidelity">
+        </div>
+        <div class="ba-col">
+          <div class="ba-col-label hi">High Fidelity</div>
+          <img src="images/d4l_hifi_rewards.png" alt="Rewards module high fidelity">
+        </div>
+      </div>
+      <p class="img-caption">Rewards module: low-fidelity wireframe vs final high-fidelity design</p>
+    </div>
+  </section>
+
+  <!-- KEY FEATURES -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">Key Features</div>
+        <h2 class="section-heading">The two modules that matter most</h2>
+        <div class="section-divider"></div>
+        <p class="body-text">While the app covers the full blood donation journey, the Rewards and Needs modules were my
+          primary design focus and the most innovative parts of the product.</p>
+      </div>
+      <div class="img-grid-3 reveal">
+        <div class="img-wrap">
+          <img src="images/d4l_hifi1.png" alt="Drop4Life rewards screen">
+          <div class="img-wrap-label">Rewards</div>
+        </div>
+        <div class="img-wrap">
+          <img src="images/d4l_hifi2.png" alt="Drop4Life blood needs screen">
+          <div class="img-wrap-label">Needs</div>
+        </div>
+        <div class="img-wrap">
+          <img src="images/d4l_hifi3.png" alt="Drop4Life donation booking screen">
+          <div class="img-wrap-label">Booking</div>
+        </div>
+      </div>
+      <div class="highlight-box reveal">
+        <p><strong>Rewards module:</strong> Users earn points for verified donations. Points unlock badges, health
+          check-up vouchers, and cafe discounts. A proof-of-donation upload flow with system confirmation notifications
+          ensures the reward loop feels fair and satisfying.</p>
+      </div>
+      <div class="highlight-box reveal"
+        style="border-left-color: var(--violet); background: rgba(124,58,237,0.05); border-color: rgba(124,58,237,0.2);">
+        <p><strong>Needs module:</strong> Real-time blood requests from nearby hospitals shown on a card-based feed.
+          Users can see blood type, urgency level, hospital name, and distance. One-tap response connects them to
+          booking. This feature transforms passive donors into active community responders.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTING -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">Testing &amp; Iteration</div>
+        <h2 class="section-heading">Real feedback, real changes</h2>
+        <div class="section-divider"></div>
+        <p class="body-text">The prototype went through <strong>task-based usability testing</strong> with potential
+          users and received professional critique from Dasuni Nuwanthika, a Senior UX Designer at IdeaHub.lk. Testing
+          focused on the Rewards donation verification flow and overall navigation.</p>
+      </div>
+      <div class="results-grid reveal">
+        <div class="result-card">
+          <div class="result-number">70.4%</div>
+          <div class="result-desc">of respondents rated the visual design as Excellent (5 out of 5)</div>
+        </div>
+        <div class="result-card">
+          <div class="result-number">4.4/5</div>
+          <div class="result-desc">average score for clarity of the donation upload process</div>
+        </div>
+        <div class="result-card">
+          <div class="result-number">4.2/5</div>
+          <div class="result-desc">average score for ease of navigation across all screens</div>
+        </div>
+      </div>
+      <div class="reveal" style="margin-top: 40px;">
+        <p class="body-text">Based on feedback, I made three key iterative refinements:</p>
+        <div class="learnings-list">
+          <div class="learning-item"><span class="learning-num">01</span>
+            <div class="learning-text">Added <strong>reward-type selection pop-ups</strong> before redeeming points, so
+              users could choose between health vouchers and cafe discounts without confusion.</div>
+          </div>
+          <div class="learning-item"><span class="learning-num">02</span>
+            <div class="learning-text">Redesigned the <strong>file-sharing interface</strong> for donation proof uploads
+              to match familiar mobile patterns (similar to WhatsApp attachment flow), reducing cognitive load.</div>
+          </div>
+          <div class="learning-item"><span class="learning-num">03</span>
+            <div class="learning-text">Added <strong>system confirmation notifications</strong> after key actions
+              (donation logged, reward redeemed) to improve feedback visibility and build user trust.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL SCREENS -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">Final Prototype</div>
+        <h2 class="section-heading">The finished product</h2>
+        <div class="section-divider"></div>
+        <p class="body-text">The final high-fidelity prototype covers all six core modules: Blood Donation, Needs,
+          Rewards, Profile, Settings, and Support. Below are key screens from the completed design.</p>
+      </div>
+      <img src="images/d4l_final_spread.png" alt="Drop4Life final high fidelity screens spread" class="img-full reveal">
+      <p class="img-caption">Final high-fidelity screens showing the complete app experience</p>
+    </div>
+  </section>
+
+  <!-- LEARNINGS -->
+  <section class="case-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-eyebrow">Reflections</div>
+        <h2 class="section-heading">What I learned</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="learnings-list reveal">
+        <div class="learning-item"><span class="learning-num">01</span>
+          <div class="learning-text"><strong>Gamification works when it is meaningful.</strong> Points and badges only
+            motivate users if they connect to real value. The health check-up reward was the most positively received
+            feature because it directly benefited the donor.</div>
+        </div>
+        <div class="learning-item"><span class="learning-num">02</span>
+          <div class="learning-text"><strong>Accessibility should be designed in, not added on.</strong> Expert feedback
+            on icon recognizability made me reconsider assumptions about what is universally understood. Not every user
+            reads the same visual language.</div>
+        </div>
+        <div class="learning-item"><span class="learning-num">03</span>
+          <div class="learning-text"><strong>Familiar patterns reduce friction.</strong> Users breeze through flows that
+            mimic apps they already use. Redesigning the file upload to match a known pattern cut confusion
+            significantly in the second test round.</div>
+        </div>
+        <div class="learning-item"><span class="learning-num">04</span>
+          <div class="learning-text"><strong>Testing with real users is humbling and necessary.</strong> My assumptions
+            about what was obvious were wrong more than once. Iteration based on feedback produced a measurably better
+            product.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="case-cta">
+    <div class="container">
+      <h2 class="reveal">See it for yourself</h2>
+      <p class="reveal">The full interactive prototype is live on Figma. Every screen, every flow, fully clickable.</p>
+      <div class="cta-buttons reveal">
+        <a href="https://www.figma.com/proto/D9OhhkHzhZNCr1peqfYlHG/Danuja_HCI_CW2?node-id=1-2176&page-id=0%3A1&t=A7aAMTalZ5qnVDMJ-1"
+          target="_blank" class="btn-red">View Prototype</a>
+        <a href="index.html#projects" class="btn-ghost">Back to All Work</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT PROJECT -->
+  <div class="next-project">
+    <div class="container-wide">
+      <div class="next-inner">
+        <div>
+          <div class="next-label">Next Project</div>
+          <div class="next-title">EcoX</div>
+        </div>
+        <a href="ecox.html" class="next-link">
+          View Case Study
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Danuja Jayasinghe</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/danuja-jayasinghe-75412628a/" target="_blank">LinkedIn</a>
+      <a href="https://github.com/JayasingheDanuja" target="_blank">GitHub</a>
+      <a href="mailto:jayasinghedanuja404@gmail.com">Email</a>
+    </div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+    (function animRing() { rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); })();
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.width = '18px'; cursor.style.height = '18px'; ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; });
+      el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
+    });
+    // Scroll progress
+    const bar = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      bar.style.width = pct + '%';
+    });
+    // Reveal
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+
+</html>
