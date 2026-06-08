@@ -51,15 +51,6 @@
       cursor: none;
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
 
     /* CURSOR */
     .cursor {
@@ -71,7 +62,7 @@
       top: 0;
       left: 0;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 100001;
       transform: translate(-50%, -50%);
       transition: width .15s, height .15s;
     }
@@ -85,7 +76,7 @@
       top: 0;
       left: 0;
       pointer-events: none;
-      z-index: 9998;
+      z-index: 100000;
       transform: translate(-50%, -50%);
       transition: transform .12s ease;
     }
@@ -143,6 +134,8 @@
       min-height: 90vh;
       display: flex;
       align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
       padding: 120px 64px 80px;
       position: relative;
       overflow: hidden;
@@ -151,6 +144,7 @@
     .case-hero-bg {
       position: absolute;
       inset: 0;
+      pointer-events: none;
       background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(229, 62, 62, 0.12) 0%, transparent 70%),
         radial-gradient(ellipse 50% 50% at 20% 80%, rgba(124, 58, 237, 0.08) 0%, transparent 60%);
     }
@@ -158,6 +152,7 @@
     .case-hero-grid {
       position: absolute;
       inset: 0;
+      pointer-events: none;
       background-image: linear-gradient(rgba(229, 62, 62, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(229, 62, 62, 0.04) 1px, transparent 1px);
       background-size: 72px 72px;
@@ -167,7 +162,8 @@
     .case-hero-content {
       position: relative;
       z-index: 2;
-      max-width: 860px;
+      flex: 1.2;
+      max-width: 800px;
     }
 
     .case-tag {
@@ -209,7 +205,7 @@
     }
 
     .case-title {
-      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-size: clamp(3rem, 7vw, 7.5rem);
       font-weight: 800;
       line-height: 0.95;
       letter-spacing: -0.04em;
@@ -273,15 +269,13 @@
 
     /* HERO IMAGE */
     .case-hero-img {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 42%;
+      position: relative;
+      z-index: 2;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 120px 64px 80px 0;
+      align-self: center;
       opacity: 0;
       animation: fadeIn 1s 0.6s forwards;
     }
@@ -919,28 +913,68 @@
       font-size: 0.75rem;
       color: var(--text-dim);
       text-decoration: none;
-      transition: color 0.2s;
-    }
+}
 
     .footer-links a:hover {
       color: var(--violet-light);
     }
 
-    @media (max-width: 900px) {
+    @media(max-width:1100px) {
+      .case-hero {
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 140px 40px 80px;
+      }
+      .case-hero-content {
+        max-width: 100%;
+      }
+      .case-meta-row {
+        justify-content: center;
+      }
+      .case-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .case-hero-img {
+        max-width: 60%;
+      }
+      .case-hero-img img {
+        max-height: 45vh;
+      }
+    }
+
+    @media(max-width:900px) {
       nav {
         padding: 18px 24px;
       }
 
       .case-hero {
-        padding: 100px 24px 60px;
+        padding: 120px 24px 60px;
       }
 
       .case-hero-img {
-        display: none;
+        max-width: 100%;
       }
 
+      .case-hero-img img {
+        max-height: 35vh;
+      }
+    }
+
+    @media (max-width: 900px) {
       .case-hero-content {
-        max-width: 100%;
+        text-align: center;
+      }
+
+      .case-meta-row {
+        justify-content: center;
+      }
+
+      .case-subtitle {
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .container,
@@ -977,6 +1011,50 @@
         gap: 14px;
         padding: 24px;
         text-align: center;
+      }
+    }
+    /* BACK TO TOP */
+    .back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(8, 8, 15, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      color: var(--red-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      z-index: 9990;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+      transition: opacity 0.3s, transform 0.3s, background 0.2s, border-color 0.2s, color 0.2s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    .back-to-top:hover {
+      background: rgba(229, 62, 62, 0.12);
+      border-color: var(--red-light);
+      color: var(--text);
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(229, 62, 62, 0.3);
+    }
+    @media (max-width: 900px) {
+      .back-to-top {
+        bottom: 24px;
+        right: 24px;
+        width: 42px;
+        height: 42px;
       }
     }
   </style>
@@ -1102,7 +1180,7 @@
           </div>
         </div>
         <p class="img-caption" style="margin-top:16px;">Early low-fidelity wireframe from CW1, exploring the core layout
-          structure (928 x 668)</p>
+          structure</p>
       </div>
   </section>
 
@@ -1371,6 +1449,13 @@
     </div>
   </footer>
 
+  <!-- BACK TO TOP -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+    </svg>
+  </button>
+
   <script>
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
@@ -1392,6 +1477,17 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    const btnTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        btnTop.classList.add('visible');
+      } else {
+        btnTop.classList.remove('visible');
+      }
+    });
+    btnTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   </script>
 </body>
 

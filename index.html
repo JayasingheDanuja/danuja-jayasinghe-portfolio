@@ -30,24 +30,20 @@
     font-family: var(--font); font-size: 16px;
     line-height: 1.6; overflow-x: hidden; cursor: none;
   }
-  body::after {
-    content: ''; position: fixed; inset: 0; pointer-events: none;
-    z-index: 1000; opacity: 0.025;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+
 
   /* CURSOR */
   .cursor {
     width: 10px; height: 10px; background: var(--violet-light);
     border-radius: 50%; position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999; transform: translate(-50%,-50%);
+    pointer-events: none; z-index: 100001; transform: translate(-50%,-50%);
     transition: width .15s, height .15s, background .2s;
   }
   .cursor-ring {
     width: 32px; height: 32px; border: 1px solid rgba(167,139,250,0.4);
     border-radius: 50%; position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998; transform: translate(-50%,-50%);
-    transition: transform .12s ease;
+    pointer-events: none; z-index: 100000; transform: translate(-50%,-50%);
+    transition: transform .12s ease, border-color .2s;
   }
 
   /* NAV */
@@ -92,6 +88,10 @@
     animation: blobdrift 14s ease-in-out infinite alternate-reverse;
   }
   @keyframes blobdrift { from{transform:translate(0,0);} to{transform:translate(30px,20px);} }
+
+  .ambient-blob { position: absolute; pointer-events: none; z-index: 0; animation: blobdrift 12s ease-in-out infinite alternate; }
+  .blob-purple { width: 800px; height: 800px; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%); }
+  .blob-pink { width: 600px; height: 600px; background: radial-gradient(circle, rgba(232,121,160,0.12) 0%, transparent 70%); animation-duration: 16s; animation-direction: alternate-reverse; }
 
   .hero-left { position: relative; z-index: 2; }
   .hero-badge {
@@ -142,6 +142,23 @@
   .orb-ring:nth-child(3) { inset: -48px; border-color: rgba(232,121,160,0.08); animation-duration: 26s; }
   .orb-ring:nth-child(4) { inset: -72px; border-color: rgba(124,58,237,0.05); animation-duration: 34s; animation-direction: reverse; }
   @keyframes spinRing { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  
+  .section-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(124,58,237,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.1) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 40%, transparent 100%);
+    pointer-events: none; z-index: 0;
+  }
+  .ambient-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px dashed rgba(124,58,237,0.15);
+    animation: spinRing 40s linear infinite;
+    pointer-events: none; z-index: 0;
+  }
+  .ambient-ring-1 { width: 800px; height: 800px; top: -100px; right: -200px; }
+  .ambient-ring-2 { width: 1200px; height: 1200px; top: -300px; right: -400px; animation-duration: 60s; animation-direction: reverse; border: 1px solid rgba(232,121,160,0.1); }
+  .ambient-ring-3 { width: 900px; height: 900px; bottom: -200px; left: -300px; animation-duration: 50s; }
   .orb-glow {
     position: absolute; inset: -30px; border-radius: 50%;
     background: radial-gradient(circle, rgba(124,58,237,0.22) 0%, transparent 70%);
@@ -245,21 +262,30 @@
   .meta-item strong { display: block; color: var(--text-muted); font-weight: 500; margin-bottom: 2px; font-size: 0.8rem; }
 
   /* PROJECTS */
-  #projects { padding: 120px 0; background: var(--bg); }
+  #projects { padding: 120px 0; background: var(--bg); position: relative; overflow: hidden; }
   .projects-header { margin-bottom: 56px; }
-  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; position: relative; z-index: 2; }
   .project-card {
+    position: relative;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 18px; overflow: hidden;
     transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; z-index: 2;
   }
-  .project-card:hover { border-color: rgba(124,58,237,0.5); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(124,58,237,0.1); }
+  .project-card:hover { border-color: rgba(124,58,237,0.5); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(124,58,237,0.15); }
+  .card-link-overlay { position: absolute; inset: 0; z-index: 1; cursor: pointer; border-radius: 18px; }
+  .project-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 0;
+  }
+  .project-card:hover::after { opacity: 1; }
+  
   .project-card.wide { grid-column: span 2; flex-direction: row; }
   .project-img-wrap { overflow: hidden; flex-shrink: 0; }
-  .project-img { width: 100%; display: block; aspect-ratio: 16/10; object-fit: cover; transition: transform 0.5s; }
+  .project-img { width: 100%; display: block; aspect-ratio: 16/10; object-fit: cover; transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .project-card.wide .project-img { aspect-ratio: auto; height: 100%; width: 480px; }
-  .project-card:hover .project-img { transform: scale(1.04); }
+  .project-card:hover .project-img { transform: scale(1.05); }
   .project-body { padding: 26px 28px 28px; display: flex; flex-direction: column; flex-grow: 1; }
   .project-card.wide .project-body { padding: 36px 40px; }
   .project-type { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--violet-light); margin-bottom: 10px; }
@@ -268,27 +294,37 @@
   .project-desc { color: var(--text-muted); font-size: 0.88rem; line-height: 1.68; font-weight: 300; margin-bottom: 20px; flex-grow: 1; }
   .project-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 22px; }
   .tag { padding: 3px 11px; background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.18); border-radius: 100px; font-size: 0.7rem; color: var(--violet-light); font-weight: 500; letter-spacing: 0.04em; }
-  .project-links { display: flex; gap: 10px; margin-top: auto; }
-  .project-link { display: inline-flex; align-items: center; gap: 5px; padding: 8px 18px; font-size: 0.78rem; font-weight: 600; text-decoration: none; border-radius: 100px; transition: all 0.2s; cursor: none; }
+  
+  .project-links { display: flex; gap: 10px; margin-top: auto; position: relative; z-index: 3; }
+  .project-link { display: inline-flex; align-items: center; gap: 5px; padding: 8px 18px; font-size: 0.78rem; font-weight: 600; text-decoration: none; border-radius: 100px; transition: all 0.2s; cursor: pointer; }
   .project-link svg { width: 12px; height: 12px; }
   .project-link.primary { background: var(--violet); color: #fff; }
-  .project-link.primary:hover { background: #8b47fa; }
-  .project-link.secondary { border: 1px solid var(--border); color: var(--text-muted); }
+  .project-link.primary:hover { background: #8b47fa; transform: translateY(-1px); }
+  .project-link.secondary { border: 1px solid var(--border); color: var(--text-muted); background: var(--surface); }
   .project-link.secondary:hover { border-color: var(--violet-light); color: var(--text); }
+  .project-link.case-study-span { border-color: rgba(124,58,237,0.4); color: var(--violet-light); }
+  .project-link.case-study-span .arrow { display: inline-flex; align-items: center; transition: transform 0.2s ease; margin-right: 4px; }
+  .project-link.case-study-span .arrow svg { width: 14px; height: 14px; }
+  .project-card:hover .project-link.case-study-span { border-color: var(--violet-light); color: var(--text); background: rgba(124,58,237,0.07); }
+  .project-card:hover .project-link.case-study-span .arrow { transform: translate(3px, -3px); }
+  
   .project-wip { font-size: 0.75rem; color: var(--text-dim); font-style: italic; margin-top: auto; padding-top: 8px; }
 
   /* GALLERY */
-  #gallery { padding: 120px 0; background: var(--bg2); }
+  #gallery { padding: 120px 0; background: var(--bg2); position: relative; overflow: hidden; }
   .gallery-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
-  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; position: relative; z-index: 2; }
   .gallery-item {
-    position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 1;
-    background: var(--surface); border: 1px solid var(--border); cursor: none;
-    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; border-radius: 14px; overflow: hidden;
+    background: var(--surface); border: 1px solid var(--border);
+    aspect-ratio: 1; cursor: none;
+    transform-style: preserve-3d;
   }
-  .gallery-item:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(124,58,237,0.12); }
-  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-  .gallery-item:hover img { transform: scale(1.07); }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.1s linear; transform-origin: center;
+  }
+  .gallery-item:hover img { filter: brightness(1.1); }
   .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,15,0.88) 0%, transparent 50%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 16px; }
   .gallery-item:hover .gallery-overlay { opacity: 1; }
   .gallery-overlay span { font-size: 0.74rem; color: var(--text-muted); font-weight: 400; }
@@ -306,7 +342,7 @@
   .author-role { font-size: 0.75rem; color: var(--text-dim); }
 
   /* CONTACT */
-  #contact { padding: 120px 0; background: var(--bg2); }
+  #contact { padding: 120px 0; background: var(--bg2); position: relative; overflow: hidden; }
   .contact-heading { text-align: center; margin-bottom: 72px; }
   .contact-big-title {
     font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 800;
@@ -381,6 +417,50 @@
     .form-row { grid-template-columns: 1fr; }
     footer { flex-direction: column; gap: 14px; padding: 24px; text-align: center; }
   }
+  /* BACK TO TOP */
+  .back-to-top {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(8, 8, 15, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    color: var(--violet-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none;
+    z-index: 9990;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.3s, transform 0.3s, background 0.2s, border-color 0.2s, color 0.2s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+  .back-to-top:hover {
+    background: rgba(124, 58, 237, 0.12);
+    border-color: var(--violet-light);
+    color: var(--text);
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+  }
+  @media (max-width: 960px) {
+    .back-to-top {
+      bottom: 24px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -413,6 +493,10 @@
     <p class="hero-bio">I design <strong>interfaces people actually enjoy using.</strong> From research to high-fidelity prototypes, I bring together visual craft and user empathy to build digital products that feel right.</p>
     <div class="hero-actions">
       <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="https://www.figma.com/design/knzwr5uia2ldvj2MeWhG73/Danuja-Jayasinghe?node-id=1-12914&t=Bvmtnq0mZCdVy6X5-1" target="_blank" class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;">
+        <svg viewBox="0 0 38 57" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"/><path fill="#0acf83" d="M0 47.5a9.5 9.5 0 0 1 9.5-9.5H19v9.5a9.5 9.5 0 1 1-19 0z"/><path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"/><path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"/><path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"/></svg>
+        Figma Portfolio
+      </a>
       <a href="Danuja_Jayasinghe.pdf" class="btn-outline" download>Download CV</a>
     </div>
   </div>
@@ -473,13 +557,18 @@
 
 <!-- PROJECTS -->
 <section id="projects">
-  <div class="container">
+  <div class="section-grid"></div>
+  <div class="ambient-ring ambient-ring-1"></div>
+  <div class="ambient-ring ambient-ring-2"></div>
+  <div class="ambient-blob blob-purple" style="top: -10%; right: -20%;"></div>
+  <div class="ambient-blob blob-pink" style="bottom: 10%; left: -10%;"></div>
+  <div class="container" style="position: relative; z-index: 2;">
     <div class="projects-header reveal">
       <div class="section-label">Selected Work</div>
       <h2 class="section-title">Projects that ship.</h2>
     </div>
     <div class="projects-grid">
-      <div class="project-card wide reveal">
+      <div class="project-card wide reveal" onclick="window.location.href='peerlit.html'" style="cursor: pointer;">
         <div class="project-img-wrap">
           <img src="images/peerlit.jpg" alt="PeerLit" class="project-img">
         </div>
@@ -489,13 +578,13 @@
           <p class="project-desc">A gamified, AI-integrated study platform designed to fight academic isolation. I led the UI design, created the mascot character, and developed the landing page, smart search, and peer matching frontend. The app combines social focus mode, 3D study spaces, and an AI study companion into one cohesive product. Live and demo-ready.</p>
           <div class="project-tags"><span class="tag">Figma</span><span class="tag">Flutter</span><span class="tag">UI Design</span><span class="tag">Mascot Design</span><span class="tag">Frontend Dev</span></div>
           <div class="project-links">
-            <a href="https://www.figma.com/proto/IU6ztvVh2ecl4dFTeTdZWT/Untitled?page-id=0%3A1&node-id=2024-4199&viewport=-6557%2C4247%2C0.38&t=1TAYAbn3TUDZOVev-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=2024%3A4199" target="_blank" class="project-link primary"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Prototype</a>
-            <a href="peerlit.html" class="project-link secondary">Case Study</a>
-            <a href="https://www.sdgp.lk/project/845c8e9f-43b2-4596-9683-f0fad851214f" target="_blank" class="project-link secondary">Project Page</a>
+            <a href="https://www.figma.com/proto/IU6ztvVh2ecl4dFTeTdZWT/Untitled?page-id=0%3A1&node-id=2024-4199&viewport=-6557%2C4247%2C0.38&t=1TAYAbn3TUDZOVev-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=2024%3A4199" target="_blank" class="project-link primary" onclick="event.stopPropagation()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Prototype</a>
+            <a href="peerlit.html" class="project-link secondary case-study-span" onclick="event.stopPropagation()"><span class="arrow"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>Read Case Study</a>
+            <a href="https://www.sdgp.lk/project/845c8e9f-43b2-4596-9683-f0fad851214f" target="_blank" class="project-link secondary" onclick="event.stopPropagation()">Project Page</a>
           </div>
         </div>
       </div>
-      <div class="project-card reveal">
+      <div class="project-card reveal" onclick="window.location.href='drop4life.html'" style="cursor: pointer;">
         <div class="project-img-wrap"><img src="images/Phone_Mockupss.jpg" alt="Drop4Life" class="project-img"></div>
         <div class="project-body">
           <div class="project-type">Individual &middot; UI/UX Design</div>
@@ -503,12 +592,12 @@
           <p class="project-desc">A blood donation mobile app built to make giving rewarding. I designed the Rewards and Needs modules with a gamified system of points, badges, and appointment booking. Tested with real users, 70.4% rated the visual design as excellent.</p>
           <div class="project-tags"><span class="tag">Figma</span><span class="tag">HCI Principles</span><span class="tag">Usability Testing</span><span class="tag">High Fidelity</span></div>
           <div class="project-links">
-            <a href="https://www.figma.com/proto/D9OhhkHzhZNCr1peqfYlHG/Danuja_HCI_CW2?node-id=1-2176&page-id=0%3A1&t=A7aAMTalZ5qnVDMJ-1" target="_blank" class="project-link primary"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Prototype</a>
-            <a href="drop4life.html" class="project-link secondary">Case Study</a>
+            <a href="https://www.figma.com/proto/D9OhhkHzhZNCr1peqfYlHG/Danuja_HCI_CW2?node-id=1-2176&page-id=0%3A1&t=A7aAMTalZ5qnVDMJ-1" target="_blank" class="project-link primary" onclick="event.stopPropagation()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Prototype</a>
+            <a href="drop4life.html" class="project-link secondary case-study-span" onclick="event.stopPropagation()"><span class="arrow"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>Read Case Study</a>
           </div>
         </div>
       </div>
-      <div class="project-card reveal">
+      <div class="project-card reveal" onclick="window.location.href='ecox.html'" style="cursor: pointer;">
         <div class="project-img-wrap"><img src="images/ix.jpg" alt="EcoX" class="project-img"></div>
         <div class="project-body">
           <div class="project-type">Individual &middot; UI/UX Design</div>
@@ -516,12 +605,12 @@
           <p class="project-desc">An AR and AI-driven sustainability app designed for a future blended-reality world. Eco-route navigation, real-time pollution overlays, and a waste-to-resource guide. My most visually ambitious work, and a competition certificate to show for it.</p>
           <div class="project-tags"><span class="tag">Figma</span><span class="tag">AR Concept</span><span class="tag">Visual Design</span><span class="tag">Competition Entry</span></div>
           <div class="project-links">
-            <a href="https://www.figma.com/proto/AHJ6skurhBlpIZo1hLPXw5/IXTechTitans?node-id=234-3228&page-id=234%3A3165&starting-point-node-id=234%3A3228&t=fTLCl49Imtu1DzXx-1" target="_blank" class="project-link primary"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Prototype</a>
-            <a href="ecox.html" class="project-link secondary">Case Study</a>
+            <a href="https://www.figma.com/proto/AHJ6skurhBlpIZo1hLPXw5/IXTechTitans?node-id=234-3228&page-id=234%3A3165&starting-point-node-id=234%3A3228&t=fTLCl49Imtu1DzXx-1" target="_blank" class="project-link primary" onclick="event.stopPropagation()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>View Prototype</a>
+            <a href="ecox.html" class="project-link secondary case-study-span" onclick="event.stopPropagation()"><span class="arrow"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>Read Case Study</a>
           </div>
         </div>
       </div>
-      <div class="project-card wide reveal">
+      <div class="project-card wide reveal" onclick="window.location.href='lifeonland.html'" style="cursor: pointer;">
         <div class="project-img-wrap"><img src="images/life_on_the_land_cs_2.png" alt="Life on Land" class="project-img"></div>
         <div class="project-body">
           <div class="project-type">Group Project &middot; Web Design &amp; Development</div>
@@ -529,7 +618,7 @@
           <p class="project-desc">A responsive website built for the Web Design and Development module as part of a four-person team. I led the Feedback system and Team components, and contributed to the visual identity and navigation design. Built with HTML, CSS, and JavaScript following a structured design lifecycle from concept to final delivery.</p>
           <div class="project-tags"><span class="tag">HTML / CSS</span><span class="tag">JavaScript</span><span class="tag">Web Design</span><span class="tag">Team Project</span></div>
           <div class="project-links">
-            <a href="lifeonland.html" class="project-link secondary">Case Study</a>
+            <a href="lifeonland.html" class="project-link secondary case-study-span" onclick="event.stopPropagation()"><span class="arrow"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>Read Case Study</a>
           </div>
           <p class="project-wip">Live deployment in progress</p>
         </div>
@@ -540,7 +629,9 @@
 
 <!-- GALLERY -->
 <section id="gallery">
-  <div class="container">
+  <div class="section-grid"></div>
+  <div class="ambient-ring ambient-ring-3"></div>
+  <div class="container" style="position: relative; z-index: 2;">
     <div class="gallery-header reveal">
       <div>
         <div class="section-label">Creative Work</div>
@@ -579,7 +670,10 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="container">
+  <div class="section-grid"></div>
+  <div class="ambient-ring ambient-ring-1" style="top: 20%; left: -200px;"></div>
+  <div class="ambient-blob blob-purple" style="bottom: -20%; right: -10%;"></div>
+  <div class="container" style="position: relative; z-index: 2;">
     <div class="contact-heading reveal">
       <div class="section-label">Get in Touch</div>
       <h2 class="contact-big-title">Let's build something<br>together.</h2>
@@ -587,7 +681,7 @@
     </div>
     <div class="contact-cols reveal">
       <!-- LEFT: Form -->
-      <form class="contact-form" action="https://formspree.io/f/xwvjlvqd" method="POST">
+      <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
         <div class="form-row">
           <div class="form-field"><label for="name">Name</label><input type="text" id="name" name="name" placeholder="Your name" required></div>
           <div class="form-field"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
@@ -626,22 +720,86 @@
   </div>
 </footer>
 
+<!-- BACK TO TOP -->
+<button id="backToTop" class="back-to-top" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+  </svg>
+</button>
+
 <script>
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
-  (function animRing(){ rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
-  document.querySelectorAll('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{ cursor.style.width='18px'; cursor.style.height='18px'; ring.style.transform='translate(-50%,-50%) scale(1.5)'; });
-    el.addEventListener('mouseleave',()=>{ cursor.style.width='10px'; cursor.style.height='10px'; ring.style.transform='translate(-50%,-50%) scale(1)'; });
+  
+  // Track mouse globally
+  document.addEventListener('mousemove', e => { 
+    mx=e.clientX; my=e.clientY; 
+    cursor.style.left=mx+'px'; cursor.style.top=my+'px'; 
   });
+  
+  // Animate cursor ring lag
+  (function animRing(){ 
+    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1; 
+    ring.style.left=rx+'px'; ring.style.top=ry+'px'; 
+    requestAnimationFrame(animRing); 
+  })();
+
+
+
+  // Hover Effects on Interactive Elements
+  document.querySelectorAll('a, button, .project-card, .gallery-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ 
+      cursor.style.width='18px'; cursor.style.height='18px'; 
+      ring.style.transform='translate(-50%,-50%) scale(1.5)';
+      ring.style.mixBlendMode='difference';
+      ring.style.borderColor='#fff';
+    });
+    el.addEventListener('mouseleave',()=>{ 
+      cursor.style.width='10px'; cursor.style.height='10px'; 
+      ring.style.transform='translate(-50%,-50%) scale(1)';
+      ring.style.mixBlendMode='normal';
+      ring.style.borderColor='rgba(167,139,250,0.4)';
+    });
+  });
+
+  // 3D Tilt for Gallery Items
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const img = item.querySelector('img');
+    item.addEventListener('mousemove', (e) => {
+      const rect = item.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -12;
+      const rotateY = ((x - centerX) / centerX) * 12;
+      img.style.transform = `scale(1.1) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    item.addEventListener('mouseleave', () => {
+      img.style.transform = `scale(1) perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+    });
+  });
+
+  // Parallax Scroll for Background Blobs
+  const heroBlobs = document.querySelectorAll('.hero-blob1, .hero-blob2, .ambient-blob');
+  window.addEventListener('scroll', () => { 
+    const scrolled = window.scrollY;
+    heroBlobs.forEach((blob, index) => {
+      const speed = (index + 1) * 0.12;
+      blob.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+    nav.classList.toggle('scrolled', scrolled > 60); 
+  });
+
+  // Intersection Observer for Reveal
   const nav = document.getElementById('mainNav');
-  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Form Submission
   const form = document.querySelector('.contact-form');
   if(form){ form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -653,6 +811,19 @@
       else { btn.textContent='Something went wrong. Email me directly.'; btn.style.background='#dc2626'; }
     } catch { btn.textContent='Something went wrong. Email me directly.'; btn.style.background='#dc2626'; }
   }); }
+
+  // Back to Top Button
+  const btnTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      btnTop.classList.add('visible');
+    } else {
+      btnTop.classList.remove('visible');
+    }
+  });
+  btnTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 </script>
 </body>
 </html>
