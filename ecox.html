@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EcoX Case Study — Danuja Jayasinghe</title>
+<meta name="description" content="EcoX: An AR and AI-powered sustainability app designed for a 2050 blended-reality world. UI/UX case study by Danuja Jayasinghe.">
+<meta name="author" content="Danuja Jayasinghe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EcoX Case Study — Danuja Jayasinghe">
+<meta property="og:description" content="An AR and AI-powered sustainability app designed for a 2050 blended-reality world.">
+<meta property="og:image" content="images/ix.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c3aed'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='800' font-size='14' fill='white'%3EDJ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
@@ -17,7 +24,10 @@
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.6;overflow-x:hidden;}
+  @media(pointer:fine){body{cursor:none;}}
+  .skip-nav{position:absolute;top:-100%;left:16px;padding:12px 24px;background:var(--green);color:#fff;border-radius:0 0 8px 8px;font-size:0.85rem;font-weight:600;text-decoration:none;z-index:10000;transition:top 0.2s ease;}
+  .skip-nav:focus{top:0;}
   .cursor{width:10px;height:10px;background:var(--green-light);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:100001;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
   .cursor-ring{width:32px;height:32px;border:1px solid rgba(111,207,151,0.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:100000;transform:translate(-50%,-50%);transition:transform .12s ease;}
   nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:20px 64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
@@ -169,6 +179,7 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-nav">Skip to content</a>
 <div class="progress-bar" id="progressBar"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
@@ -409,6 +420,8 @@ document.addEventListener('keydown',function(e){
 });
 </script>
 <script>
+  // Hide custom cursor on touch devices
+  if(!window.matchMedia('(pointer:fine)').matches){document.getElementById('cursor').style.display='none';document.getElementById('cursorRing').style.display='none';}
   const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
   let mx=0,my=0,rx=0,ry=0;
   

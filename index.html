@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Danuja Jayasinghe — UI/UX Designer</title>
+<meta name="description" content="UI/UX Designer crafting interfaces people enjoy using. Explore case studies in mobile app design, AR concepts, and web development by Danuja Jayasinghe.">
+<meta name="author" content="Danuja Jayasinghe">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Danuja Jayasinghe — UI/UX Designer">
+<meta property="og:description" content="UI/UX Designer crafting interfaces people enjoy using. Explore case studies in mobile app design, AR concepts, and web development.">
+<meta property="og:image" content="images/pfp_1.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Danuja Jayasinghe — UI/UX Designer">
+<meta name="twitter:description" content="UI/UX Designer crafting interfaces people enjoy using.">
+<meta name="twitter:image" content="images/pfp_1.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c3aed'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='800' font-size='14' fill='white'%3EDJ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
@@ -28,8 +39,19 @@
   body {
     background: var(--bg); color: var(--text);
     font-family: var(--font); font-size: 16px;
-    line-height: 1.6; overflow-x: hidden; cursor: none;
+    line-height: 1.6; overflow-x: hidden;
   }
+  @media (pointer: fine) { body { cursor: none; } }
+
+  /* SKIP NAV */
+  .skip-nav {
+    position: absolute; top: -100%; left: 16px;
+    padding: 12px 24px; background: var(--violet); color: #fff;
+    border-radius: 0 0 8px 8px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; z-index: 10000;
+    transition: top 0.2s ease;
+  }
+  .skip-nav:focus { top: 0; }
 
 
   /* CURSOR */
@@ -223,7 +245,7 @@
   .reveal.visible { opacity:1; transform:translateY(0); }
 
   /* ABOUT */
-  #about { padding: 120px 0; background: var(--bg2); }
+  #about { padding: 120px 0; background: var(--bg2); position: relative; overflow: hidden; }
   .about-top { margin-bottom: 48px; }
   .about-top .section-divider { margin-bottom: 0; }
   .about-grid {
@@ -330,7 +352,7 @@
   .gallery-overlay span { font-size: 0.74rem; color: var(--text-muted); font-weight: 400; }
 
   /* TESTIMONIAL */
-  #testimonial { padding: 100px 0; background: var(--bg); }
+  #testimonial { padding: 100px 0; background: var(--bg); position: relative; overflow: hidden; }
   .testimonial-inner { max-width: 720px; margin: 0 auto; text-align: center; }
   .quote-icon { font-size: 4rem; line-height: 1; color: var(--violet); opacity: 0.25; font-family: Georgia, serif; display: block; margin-bottom: 8px; }
   .testimonial-text { font-size: 1.12rem; color: var(--text-muted); font-weight: 300; font-style: italic; line-height: 1.78; margin-bottom: 32px; }
@@ -465,6 +487,7 @@
 </head>
 <body>
 
+<a href="#main-content" class="skip-nav">Skip to content</a>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
@@ -520,8 +543,12 @@
 </section>
 
 <!-- ABOUT -->
-<section id="about">
-  <div class="container">
+<section id="about" tabindex="-1">
+<div id="main-content"></div>
+  <div class="section-grid" style="opacity: 0.5;"></div>
+  <div class="ambient-blob blob-purple" style="top: -10%; left: -20%; opacity: 0.5;"></div>
+  <div class="ambient-blob blob-pink" style="bottom: -10%; right: -20%; opacity: 0.5;"></div>
+  <div class="container" style="position: relative; z-index: 2;">
     <div class="about-top reveal">
       <div class="section-label">About Me</div>
       <h2 class="section-title">Designer with a developer's eye</h2>
@@ -652,7 +679,9 @@
 
 <!-- TESTIMONIAL -->
 <section id="testimonial">
-  <div class="container">
+  <div class="section-grid" style="opacity: 0.4;"></div>
+  <div class="ambient-blob blob-pink" style="top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.3; width: 600px; height: 600px;"></div>
+  <div class="container" style="position: relative; z-index: 2;">
     <div class="testimonial-inner reveal">
       <span class="quote-icon">"</span>
       <p class="testimonial-text">The user interface you designed for Drop4Life is <strong>clean, minimal, and easy to navigate.</strong> Your application of basic user experience principles is <strong>evident and greatly appreciated.</strong> I wish you all the best in your pursuit of a career in user experience design.</p>
@@ -681,7 +710,7 @@
     </div>
     <div class="contact-cols reveal">
       <!-- LEFT: Form -->
-      <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form class="contact-form" action="https://formspree.io/f/xwvjlvqd" method="POST">
         <div class="form-row">
           <div class="form-field"><label for="name">Name</label><input type="text" id="name" name="name" placeholder="Your name" required></div>
           <div class="form-field"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
@@ -728,6 +757,12 @@
 </button>
 
 <script>
+  // Hide custom cursor on touch devices
+  if (!window.matchMedia('(pointer: fine)').matches) {
+    document.getElementById('cursor').style.display = 'none';
+    document.getElementById('cursorRing').style.display = 'none';
+  }
+
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx=0,my=0,rx=0,ry=0;
@@ -772,8 +807,8 @@
       const y = e.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -12;
-      const rotateY = ((x - centerX) / centerX) * 12;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
       img.style.transform = `scale(1.1) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
     });
     item.addEventListener('mouseleave', () => {

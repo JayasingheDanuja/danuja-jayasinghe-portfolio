@@ -5,6 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PeerLit Case Study — Danuja Jayasinghe</title>
+  <meta name="description" content="PeerLit: A gamified, AI-integrated mobile study platform to combat academic isolation. UI/UX case study by Danuja Jayasinghe.">
+  <meta name="author" content="Danuja Jayasinghe">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="PeerLit Case Study — Danuja Jayasinghe">
+  <meta property="og:description" content="A gamified, AI-integrated mobile study platform designed to combat academic isolation and procrastination.">
+  <meta property="og:image" content="images/pl_1.png">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c3aed'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='800' font-size='14' fill='white'%3EDJ%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -47,7 +54,25 @@
       font-size: 16px;
       line-height: 1.6;
       overflow-x: hidden;
-      cursor: none;
+    }
+    @media(pointer:fine){body{cursor:none;}}
+
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 16px;
+      padding: 12px 24px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 0 0 8px 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      z-index: 10000;
+      transition: top 0.2s ease;
+    }
+    .skip-nav:focus {
+      top: 0;
     }
 
 
@@ -980,6 +1005,7 @@
 </head>
 
 <body>
+  <a href="#main-content" class="skip-nav">Skip to content</a>
   <div class="progress-bar" id="progressBar"></div>
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
@@ -1302,6 +1328,11 @@
   </button>
 
   <script>
+    // Hide custom cursor on touch devices
+    if (!window.matchMedia('(pointer: fine)').matches) {
+      document.getElementById('cursor').style.display = 'none';
+      document.getElementById('cursorRing').style.display = 'none';
+    }
     const cursor = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
     let mx = 0, my = 0, rx = 0, ry = 0;
     document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
