@@ -758,6 +758,10 @@
 
     .about-top {
       margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
     .about-top .section-divider {
@@ -765,33 +769,39 @@
     }
 
     .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+      text-align: center;
     }
 
-    .about-text p {
-      color: var(--text-muted);
-      font-size: 0.97rem;
-      line-height: 1.78;
-      font-weight: 300;
-      margin-bottom: 18px;
+    .about-text {
+      max-width: 780px;
+      width: 100%;
     }
 
-    .about-text p strong {
+    .about-statement {
+      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+      font-weight: 700;
+      line-height: 1.4;
       color: var(--text);
-      font-weight: 500;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
     }
 
-    .about-text p:last-child {
-      margin-bottom: 0;
+    .about-description {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      font-weight: 300;
     }
 
     .skills-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
     }
 
     .skill-chip {
@@ -805,6 +815,7 @@
       transition: border-color 0.2s, color 0.2s;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
     }
 
@@ -1479,8 +1490,12 @@
       }
 
       .about-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 36px;
+      }
+
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
       }
 
       .projects-grid {
@@ -1515,6 +1530,12 @@
         gap: 14px;
         padding: 24px;
         text-align: center;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1649,16 +1670,8 @@
 
       <div class="about-grid reveal">
         <div class="about-text">
-          <p>I'm Danuja, a UI/UX Designer studying <strong>BEng (Hons) Computer Science</strong> at the University of
-            Westminster, based at the Informatics Institute of Technology, Colombo. I care about the details that make
-            digital products feel intuitive and human.</p>
-          <p>My background spans both design and development, from wireframes and high-fidelity Figma prototypes to
-            front-end code. I've worked on mobile apps, web platforms, and AR concept designs, always with the same
-            goal: <strong>clarity over complexity.</strong> Through the Mobile Application Development module I built
-            two Android apps, which deepened my understanding of how design decisions become real code. My HCI studies
-            sharpened how I think about usability, accessibility, and the human behind every interface.</p>
-          <p>Outside of UI/UX, I create digital illustrations and graphic design work, because I believe the best
-            designers never stop making things just for the love of it.</p>
+          <h3 class="about-statement">I blend human-centered design with technical logic to build simple, thoughtful interfaces.</h3>
+          <p class="about-description">I'm a UI/UX Designer studying Computer Science at Westminster. By combining human-computer interaction (HCI) principles with front-end engineering, I bridge the gap between creative visual design and functional code.</p>
         </div>
 
         <div class="skills-grid">
@@ -1671,12 +1684,6 @@
           <div class="skill-chip"><span class="skill-dot"></span>Inkscape &amp; MediBang</div>
           <div class="skill-chip"><span class="skill-dot"></span>Canva &amp; Branding</div>
         </div>
-      </div>
-
-      <div class="about-meta reveal">
-        <div class="meta-item"><strong>Education</strong>University of Westminster, UK</div>
-        <div class="meta-item"><strong>Based in</strong>Colombo, Sri Lanka</div>
-        <div class="meta-item"><strong>Member</strong>IEEE IIT 2025/26</div>
       </div>
     </div>
   </section>
